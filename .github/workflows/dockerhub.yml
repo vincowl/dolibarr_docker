@@ -3,7 +3,7 @@ name: Build Docker Images
 on:
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * *'
@@ -27,7 +27,7 @@ jobs:
 
       - name: Get Dolibarr version
         id: dolibarr-version
-        run: echo "::set-output name=dolibarr-version::$(curl -sX GET https://raw.githubusercontent.com/tuxgasy/docker-dolibarr/master/versions.sh | grep 'DOLIBARR_LATEST_TAG=' | awk '{print $2}' FS='[=]')"
+        run: echo "::set-output name=dolibarr-version::$(curl -sX GET https://raw.githubusercontent.com/tuxgasy/docker-dolibarr/master/versions.sh | grep 'DOLIBARR_LATEST_TAG=' | awk '{print $2}' FS='["]')"
 
       - name: Build and push
         uses: docker/build-push-action@v2
