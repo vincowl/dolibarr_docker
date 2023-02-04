@@ -30,7 +30,7 @@ jobs:
         run: echo "::set-output name=dolibarr-version::$(curl -sX GET https://raw.githubusercontent.com/tuxgasy/docker-dolibarr/master/versions.sh | grep 'DOLIBARR_LATEST_TAG=' | awk '{print $2}' FS='["]')"
 
       - name: Build and push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           push: true
           tags: vincowl/dolibarr-docker:latest, vincowl/dolibarr-docker:${{ steps.dolibarr-version.outputs.dolibarr-version}}
