@@ -25,6 +25,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Check if update available
+        id: check
+        uses: lucacome/docker-image-update-checker@v2.0.0
+        with:
+          base-image: dolibarr/dolibarr:latest
+          image: vincowl/dolibarr-docker:latest
+
       - name: Get Dolibarr version
         id: dolibarr-version
         run: echo "::set-output name=dolibarr-version::$(curl -sX GET https://raw.githubusercontent.com/tuxgasy/docker-dolibarr/master/versions.sh | grep 'DOLIBARR_LATEST_TAG=' | awk '{print $2}' FS='["]')"
@@ -32,5 +39,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          context: .
           push: true
           tags: vincowl/dolibarr-docker:latest, vincowl/dolibarr-docker:${{ steps.dolibarr-version.outputs.dolibarr-version}}
+        if: steps.check.outputs.needs-updating == 'true'
+
